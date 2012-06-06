@@ -1,0 +1,109 @@
+{
+  "hosts": {
+              "node1": {
+                  "totalMemory": 4096,
+                  "totalCpus": 8,
+                  "disk": 1024000 
+              },
+              "node2": {
+                  "totalMemory": 4096,
+                  "totalCpus": 8,
+                  "disk": 1024000 
+              },
+              "node3": {
+                  "totalMemory": 4096,
+                  "totalCpus": 8,
+                  "disk": 1024000 
+              },
+              "node4": {
+                  "totalMemory": 4096,
+                  "totalCpus": 8,
+                  "disk": 1024000 
+              },
+              "node5": {
+                  "totalMemory": 4096,
+                  "totalCpus": 8,
+                  "disk": 1024000 
+              }
+          },
+  "services": {
+              "s1": {
+                "timeSla": 5,
+                "type": "time",
+                "memoryConst": 1024,
+                "memoryPerCPU": 256
+              },
+              "s2": {
+                "timeSla": 9,
+                "type": "time",
+                "memoryConst": 512,
+                "memoryPerCPU": 256                
+              },
+              "s3": {
+                "timeSla": 5,
+                "type": "time",
+                "memoryConst": 256,
+                "memoryPerCPU": 256                
+              },
+              "s4": {
+                "type": "load",
+                "memoryConst": 256,
+                "memoryPerCPU": 256                
+              }
+  },
+  "vms": {
+    "s1i1": {
+        "service": "s1",
+        "host": "node1",
+        "cpus": 2,
+        "memory": 1536,
+        "responseTime": 7,
+        "load": 0.8,
+        "memoryUsage": 0.5
+    },
+    "s1i2": {
+        "service": "s1",
+        "host": "node2",        
+        "cpus": 2,
+        "memory": 1536,
+        "responseTime": 7,
+        "load": 0.8,
+        "memoryUsage": 0.5
+    },
+    "s2i1": {
+        "service": "s2",
+        "cpus": 2,
+        "host": "node1",        
+        "memory": 1024,
+        "responseTime": 9,
+        "load": 0.8,
+        "memoryUsage": 0.5
+    },
+    "s2i2": {
+        "service": "s2",
+        "cpus": 4,
+        "host": "node2",        
+        "memory": 1536,
+        "responseTime": 9,
+        "load": 0.8,
+        "memoryUsage": 0.5
+    },
+    "s3i1": {
+        "service": "s3",
+        "cpus": 2,
+        "host": "node1",        
+        "memory": 768,
+        "responseTime": 15,
+        "load": 0.8,
+        "memoryUsage": 0.5
+    },
+    "s4i1": {
+        "service": "s4",
+        "cpus": 2,
+        "host": "node3",        
+        "memory": 768,
+        "load": 0.97,
+        "memoryUsage": 0.5
+    }
+  }
+}

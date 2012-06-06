@@ -1,0 +1,99 @@
+option solver cbc;
+model private/optimizer.mod;
+data;
+
+
+set NODE := 
+    <%= hosts.keys.join ' ' %>
+;
+
+
+param:    cpu_count total_memory :=  
+    <%= hosts.map { |id, h| "#{id} #{h['totalCpus']} #{h['totalMemory']}"  }.join " \n" %>
+;
+
+set SERVICE := 
+    <%= services.keys.join ' ' %>
+;
+<% 
+  time_sla_services = services.select { |id, s| s['type'] == 'time' }.map { |id,s| id}
+  load_sla_services = services.select { |id, s| s['type'] == 'load' }.map { |id,s| id}
+%>
+
+set TIME_SLA_SERVICE := 
+    <%= services.select { |id, s| s['type'] == 'time' }.map { |id,s| id}.join " " %>
+;
+
+set LOAD_SLA_SERVICE := 
+    <%= services.select { |id, s| s['type'] == 'load' }.map { |id,s| id}.join " " %>
+;
+
+param:       time_sla := 
+    <%= services.select { |id, s| s['type'] == 'time' }.map { |id, s| "#{id} #{s['timeSla']}"  }.join " \n" %>
+;
+
+param:       memory_const memory_per_cpu := 
+    <%= services.map { |id, s| "#{id} #{s['memoryConst']} #{s['memoryPerCPU']}"  }.join " \n" %>
+;
+
+
+set INSTANCE :=  <%= vms.keys.join ' ' %>;
+
+param:  vcpu_count cpu_load memory memory_usage     := 
+    <%= vms.map { |id, i| "#{id} #{i['cpus']} #{i['load']} #{i['memory']}  #{i['memoryUsage']}"  }.join " \n" %>
+;
+
+param:  response_time     := 
+    <%= vms.select {|id,i| time_sla_services.include?(i['service']) }.map { |id, i| "#{id} #{i['responseTime']}"  }.join " \n" %>
+;
+
+set INSTANCE_SPEC :=
+    <%= vms.map { |id, i| "(#{i['host']}, #{i['service']}, #{id}) "  }.join " \n" %>
+;
+
+display SERVICE;
+display NODE;
+display INSTANCE;
+
+display cpu_count;
+display vcpu_count;
+display service_vcpu_count;
+display new_vcpu_count;
+
+display NODE_INSTANCE;
+
+
+# check;
+
+solve;
+
+
+printf "--- solution ---\n";
+
+printf("stop_vm:\n");
+
+for {i in INSTANCE} {
+  if KeepInstance[i] == 0 then
+    printf "    - %s\n", i;
+}
+
+printf("start_vm:\n");
+
+
+for {s in SERVICE, n in NODE} {
+  if AddVCPUs[s,n] != 0 then {
+    printf "    - service: %s\n", s;
+    printf "      cpu: %d\n", AddVCPUs[s,n];
+  }
+}
+
+
+printf "ampl:\n";
+printf "    cost: %d\n", Cost;
+printf "    solve_message: '%s'\n", solve_message;
+printf "    solve_exit_code: '%s'\n", solve_exitcode;
+printf "    solve_result_num: '%s'\n", solve_result_num;
+printf "    solve_result: '%s'\n", solve_result;
+
+printf "--- end ---\n";
+quit;

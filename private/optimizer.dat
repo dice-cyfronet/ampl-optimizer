@@ -1,0 +1,53 @@
+set NODE := 
+  node1
+  node2
+  node3
+  node4
+  node5
+;
+
+param:    cpu_count :=
+  node1   8
+  node2   8
+  node3   8
+  node4   8
+  node5   8
+;
+
+set SERVICE :=
+  service1
+  service2
+  service3
+;
+
+param:       sla :=
+  service1    3
+  service2    3
+  service3    3
+;
+
+set INSTANCE := 
+  s1i1
+  s1i2
+  s2i1
+  s2i2
+  s3i1
+;
+
+param:  vcpu_count      response_time       requests_served :=
+  s1i1          2                   7                   100
+  s1i2          2                   7                   100
+  s2i1          2                   9                    50
+  s2i2          4                   9                   100
+  s3i1          2                  15                    30
+;
+
+set SERVICE_INSTANCE[service1] := s1i1 s1i2;
+set SERVICE_INSTANCE[service2] := s2i1 s2i2;
+set SERVICE_INSTANCE[service3] := s3i1;
+
+set NODE_INSTANCE[node1] := s1i1 s2i1 s3i1;
+set NODE_INSTANCE[node2] := s1i2 s2i2;
+set NODE_INSTANCE[node3] := ;
+set NODE_INSTANCE[node4] := ;
+set NODE_INSTANCE[node5] := ;

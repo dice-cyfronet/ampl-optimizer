@@ -1,0 +1,66 @@
+# Data from http://blog.cloudharmony.com/2010/05/what-is-ecu-cpu-benchmarking-in-cloud.html
+
+
+
+set TYPE := 
+  m2.4xlarge m2.2xlarge linux.c1.xlarge m2.xlarge m1.xlarge m1.large c1.medium m1.small 
+  # rs-16gb rs-2gb rs-1gb rs-4gb
+  # gg-8gb gg-4gb gg-2gb gg-1gb
+  # eh-8gb-20gh eh-4gb-8gh eh-2gb-4gh eh-1gb-2gh
+  private
+;
+
+
+set SERVICE :=
+  service1
+  service2
+  service3
+;
+
+param:       sla :=
+  service1     5
+  service2    10
+  service3    15
+;
+
+set INSTANCE := 
+  i1
+  i2
+  i3
+  i4
+  i5
+;
+
+set INSTANCE_SPEC :=
+  (m1.small, service1, i1)
+  (m1.small, service1, i2)
+  (m1.small, service2, i3)
+  (m1.small, service2, i4)
+  (m1.small, service3, i5)
+;
+
+param:                          response_time       requests_served :=
+  i1                       7                   100
+  i2                       7                   100
+  i3                       9                    50
+  i4                       12                   100
+  i5                      15                    30
+;
+
+param:        instance_price  ccu      :=
+# Amazon Web Services (AWS) [US East] 
+  m2.4xlarge        2.40    27.25     
+  m2.2xlarge        1.20    14.89     
+  linux.c1.xlarge   0.68    8.78      
+  m2.xlarge         0.50    7.05      
+  m1.xlarge         0.68    5.15      
+  m1.large          0.34    4.08      
+  c1.medium         0.17    3.43      
+  m1.small          0.085   0.92      
+# hyphotetical instance of private cloud
+  private           0       1         
+;
+
+param max_private := 2;
+
+ 
